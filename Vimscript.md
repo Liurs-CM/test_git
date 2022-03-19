@@ -145,3 +145,9 @@
 - `e`光标置于单词尾字母
 - `l`光标置于结尾引号
 
+##13. Training Your Fingers
+- 节省手指的磨损
+:inoremap jk <esc>
+- 默认可退出插入模式的指令
+`<esc>` `<c-c>` `<c-[>`
+###
