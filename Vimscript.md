@@ -150,4 +150,26 @@
 :inoremap jk <esc>
 - 默认可退出插入模式的指令
 `<esc>` `<c-c>` `<c-[>`
-###
+###学习路线
+- 一个学习技巧：禁用旧键来强制使用
+:inoremap <esc> <nop>
+
+##14. Buffer-Local Options and Mappings
+缓冲区本地选项和映射
+- 映射、缩写和选项
+###映射
+- 利用Vim新建2个文件，分别命名为foo和bar
+- 切换到`foo`，并运行
+:nnoremap           <leader>d dd
+:nnoremap <buffer>  <leader>x dd
+- 在文件`foo`中，`<leader>d`会删除一行，`<leader>x`也会删除一行
+- 到文件`bar`中，`<leader>d`会删除一行，`<leader>x`只删除了一个字符
+- 由于`foo`中的`<buffer>`只在定义映射的缓冲区中才考虑，其在`bar`未能生效
+- 缓冲区推荐使用局域前导符`<localleader>`
+###设置set
+:setlocal wrap
+- 只在特定文件生效
+###局部映射优先级大于全局映射
+- 尝试在`foo`中运行
+:nnoremap   <buffer>    Q x
+:nnoremap               Q dd
