@@ -236,3 +236,86 @@
     :autocmd Filetypes javascript   nnoremap <buffer> <localleader>c I//<esc>
     :autocmd Filetypes python       nnoremap <buffer> <localleader>c I#<esc>
     ```
+##16. Buffer-Local Abbreviations
+###缓冲区局部缩写
+- 打开`foo`文件，运行以下命令
+```
+:iabbrev <buffer> --- &mdash
+```
+- 在`foo`文件插入模式下键入文本
+```
+Hello --- world
+```
+- Vim会将`---`替换，在`bar`文件中插入上述文本却不会替换
+###自动命令和缩写
+- 将缓冲区本地缩写与自动命令配对，设置为自己使用的小片段系统
+```
+:autocmd Filetypes python       :iabbrev <buffer> iff if:<left>
+:autocmd Filetypes javascript   :iabbrev <buffer> iff if ()<left>
+```
+
+##17. Autocommands Groups
+###熟悉自动命令的特性
+- 写入缓冲区消息日志，写入，查看消息日志
+    ```
+    :autocmd BufWrite * :echom "Writing buffer!"
+    :write
+    :messages
+    ```
+- 可以在消息列表中看到`Writing buffer!`
+- 再次运行上述命令
+    ```
+    :autocmd BufWrite * :echom "Writing buffer!"
+    :write
+    :messages
+    ```
+- 可以在消息列表中看到`Writing buffer!``2`次
+- 再次运行上述命令看到`Writing buffer!``3`次
+###问题：vim会创建重复的自动命令，造成延迟
+- 每次执行`~/.vimrc`会复制导致Vim运行速度变慢
+```
+:autocmd BufWrite * :sleep 200m
+:autocmd BufWrite * :sleep 200m
+:autocmd BufWrite * :sleep 200m
+```
+###自动命令分组
+- 将相关的自动命令集成到一个组
+    ```
+    :augroup testgroup
+    :   autocmd BufWrite * :echom "Foo"
+    :   autocmd BufWrite * :echom "Bar"
+    :augroup END
+    ```
+- 再次输入组内命令
+    ```
+    :augroup testgroup
+    :   autocmd BufWrite * :echom "Baz"
+    :augroup END
+    ```
+- Vim并未将上述命令替换，而是尝试合并
+###清除命令组
+- 多次使用`augroup`时Vim会将这些命令组合到一个组
+- 清除命令组命令`autocmd!`
+    ```
+    :augroup testgroup
+    :   autocmd!
+    :   autocmd BufWrite * :echom "Cats"
+    :augroup END
+    ```
+###在Vimrc中使用自动命令组的`正确打开方式`
+- 示例：添加以下内容至`~/.vimrc`文件
+    ```
+    augroup filetype_html
+        autocmd!
+        autocmd Filetypes html nnoremap <buffer> <localleader>f Vatzf
+    augroup END
+    ```
+##18. Operator-Pending Mapping
+- 运算符的一些示例
+    ```
+    Keys    Operator    Movement
+    ----    --------    ------------
+    dw      Delete      to next word
+    ci(     Change      inside parens
+    yt,     Yank        until comma
+    ```
