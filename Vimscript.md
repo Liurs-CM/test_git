@@ -319,3 +319,48 @@ Hello --- world
     ci(     Change      inside parens
     yt,     Yank        until comma
     ```
+###移动映射
+- 创建与现有命令一起使用的新动作
+    ```
+    :onoremap p i(
+    ```
+- 在编辑器中输入
+    ```
+    return person.get_pets(type="cat", fluffy_only=True)
+    ```
+- 光标置于`"cat"`上，输入`dp`，括号内的所有内容被删除
+- 创建第二个移动映射命令
+    ```
+    :onoremap b /return<cr>
+    ```
+- 在编辑器中输入
+    ```
+    def count(i):
+        i += 1
+        print i
+        return foo
+    ```
+- 定义新的移动映射操作符
+    1. 从光标位置开始
+    2. 进入可视模式(charwise)
+    3. 映射按键到指定位置
+    4. 选择在移动过程中包含的文本
+###改变起点
+- 解决光标总是从当前位置开始的问题
+```
+:onoremap in( :<c-u>normal! f(vi(<cr>
+```
+- 在编辑器中输入文本并在`print`的某个位置键入`cin(`
+```
+print foo(bar)
+```
+- Vim将删除括号中的内容并置于插入模式
+- 命令解释
+    1. `<c-u>`暂时忽略
+    2. `:normal!`模拟正常模式下的按键命令
+    3. `<cr>`执行`:normal!`的命令内容
+    4. `f(`向后移动到最近的`(`字符
+    5. `vi(`可视选择括号内容
+
+##19. More Operator-Pending Mappings
+

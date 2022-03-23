@@ -1,0 +1,13 @@
+
+    return person.get_pets()
+
+def count(i):
+    i += 1
+    print i
+
+    return foo
+
+
+
+print foo(bar)
+
